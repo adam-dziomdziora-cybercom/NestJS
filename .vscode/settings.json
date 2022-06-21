@@ -1,0 +1,9 @@
+{
+  "appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"],
+  "appService.defaultWebAppToDeploy": "/subscriptions/8f69462c-5cef-4c99-b4b2-250f8a0bb0a5/microsoft.web/sites/subscriptions/8f69462c-5cef-4c99-b4b2-250f8a0bb0a5/resourceGroups/DziomTestOrg/providers/Microsoft.Web/sites/restjs",
+  "appService.deploySubpath": ".",
+  "editor.formatOnSave": true,
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/hadolint/hadolint/master/contrib/hadolint.json": "file:///c%3A/repo/github/NestJS/.github/workflows/hadolint.yml"
+  }
+}
