@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "npm run lint && npm run format && npm run test && nest build",
+    "build": "npm run lint && npm run format && nest build",
     "format": "npx prettier --write \"src/**/*.{js,jsx,ts,tsx,html,css,scss}\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
