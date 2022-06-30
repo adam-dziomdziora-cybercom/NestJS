@@ -12,16 +12,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Setup NodeJS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Unit Test Frontend
-        run: |
-          npm install
-          npm run test
-
       - name: Build Docker images
         run: |
           docker build . -t digivisio2030.azurecr.io/nestjs:latest

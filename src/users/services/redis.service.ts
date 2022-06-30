@@ -3,7 +3,7 @@ import Redis, { RedisOptions } from 'ioredis';
 
 @Injectable()
 export class RedisService {
-  public client: Redis.Redis;
+  public client: Redis;
   constructor(host: string, port: number) {
     const option: RedisOptions = { host, port };
     this.client = new Redis(option);
