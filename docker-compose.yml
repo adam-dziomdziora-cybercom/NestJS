@@ -13,6 +13,8 @@ services:
       - DB_SSL=false
       - REDIS_PORT=6379
       - REDIS_HOST=192.168.0.123
+      - REDIS_SSL=false
+      - KEY_VAULT_NAME=mywebapskeyvault
 
     build:
       context: .
@@ -50,7 +52,7 @@ services:
 
   postgres:
     container_name: postgres
-    image: postgres:13.7-alpine
+    image: postgres:14.4-alpine
     networks:
       - webnet
     environment:

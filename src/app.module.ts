@@ -38,6 +38,8 @@ import 'dotenv/config'; // this is needed to load .env file
         new RedisService(
           env.get('REDIS_HOST').required().asString(),
           env.get('REDIS_PORT').required().asPortNumber(),
+          env.get('REDIS_PASSWORD').asString(),
+          env.get('REDIS_SSL').required().asBool(),
         ),
     },
   ],
