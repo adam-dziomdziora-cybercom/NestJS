@@ -26,6 +26,13 @@ jobs:
         run: |
           npm run build
 
+      - name: Login to ACR
+        uses: azure/docker-login@v1
+        with:
+          login-server: digivisio2030.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
       - name: Build Docker images
         run: |
           docker build . -t digivisio2030.azurecr.io/nestjs:latest
@@ -44,6 +51,10 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
+      - name: Push Docker images
+        run: |
+          docker push digivisio2030.azurecr.io/nestjs:latest
+
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
