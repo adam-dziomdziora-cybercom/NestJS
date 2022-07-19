@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { OnModuleInit } from '@nestjs/common';
-import * as moment from 'moment';
+// import * as moment from 'moment';
 import { AppService } from './app.service';
 import { IName } from './names.entity';
 import { RedisService } from './users/services/redis.service';

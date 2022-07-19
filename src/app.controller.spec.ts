@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GenericContainer, StartedTestContainer } from 'testcontainers';
 import { RedisService } from './users/services/redis.service';
-import * as moment from 'moment';
+// import * as moment from 'moment';
 
 describe('AppController', () => {
   jest.setTimeout(50000);
@@ -37,22 +37,22 @@ describe('AppController', () => {
     it('should return "Hello World!"', async () => {
       const appController = app.get<AppController>(AppController);
       const result = await appController.getHello();
-      expect(result).toBe('Hello World!, app started at: null');
+      expect(result).toBe('no redis cache :(');
     });
 
-    it('should return "Hello World! with date from Redis"', async () => {
-      const appController = app.get<AppController>(AppController);
-      const date = moment().format('ll'); // Jun 21, 2022
-      await app.init();
-      const result = await appController.getHello();
-      expect(result).not.toBe('Hello World!, app started at: null');
-      expect(result).toContain('Hello World!, app started at: ');
-      expect(result).toContain(date);
-    });
+    // it('should return "Hello World! with date from Redis"', async () => {
+    //   const appController = app.get<AppController>(AppController);
+    //   const date = moment().format('ll'); // Jun 21, 2022
+    //   await app.init();
+    //   const result = await appController.getHello();
+    //   expect(result).not.toBe('Hello World!, app started at: null');
+    //   expect(result).toContain('Hello World!, app started at: ');
+    //   expect(result).toContain(date);
+    // });
   });
 
   afterAll(async () => {
-    redisClient.client.disconnect();
+    // redisClient.client.disconnect();
     await container.stop();
   });
 });
