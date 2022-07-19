@@ -14,15 +14,16 @@ export class AppController implements OnModuleInit {
   ) {}
 
   async onModuleInit(): Promise<void> {
-    const date = moment().format('llll'); // Tue, Jun 21, 2022 10:25 AM
-    await this.redisService.client.set(this.key, date);
+    // const date = moment().format('llll'); // Tue, Jun 21, 2022 10:25 AM
+    // await this.redisService.client.set(this.key, date);
     await this.appService.prepareDatabase();
   }
 
   @Get()
   async getHello(): Promise<string> {
-    const date = await this.redisService.client.get(this.key);
-    return `${this.appService.getHello()}, app started at: ${date}`;
+    // const date = await this.redisService.client.get(this.key);
+    // return `${this.appService.getHello()}, app started at: ${date}`;
+    return 'no redis cache :(';
   }
 
   @Get('/namesMale')
