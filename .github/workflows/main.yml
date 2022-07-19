@@ -21,6 +21,9 @@ jobs:
         run: |
           npm install
           npm run test
+
+      - name: Build Frontend
+        run: |
           npm run build
 
       - name: Build Docker images
@@ -52,5 +55,5 @@ jobs:
         with:
           app-name: 'mynestjs'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_f826446949014c16b6e2d2df4213b6e0 }}
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile }}
           package: .
