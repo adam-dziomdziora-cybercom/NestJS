@@ -21,6 +21,7 @@ jobs:
         run: |
           npm install
           npm run test
+          npm run test:e2e
 
       - name: Build Frontend
         run: |
@@ -40,23 +41,3 @@ jobs:
       - name: Push Docker images
         run: |
           docker push digivisio2030.azurecr.io/nestjs:latest
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: node-app
-          path: ./dist
-
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: node-app
-
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'mynestjs'
-          slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile }}
-          package: .
