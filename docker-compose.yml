@@ -4,7 +4,7 @@ services:
   main:
     container_name: main
     environment:
-      - APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=6a8121ce-cc3c-4512-9766-9ac5111590c7;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/
+      - APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=5bf2ef4c-25b9-417f-b8b7-a71493d8f989;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/
       - DB_HOST=192.168.0.123
       - DB_PORT=5432
       - DB_USERNAME=POSTGRES_USER
