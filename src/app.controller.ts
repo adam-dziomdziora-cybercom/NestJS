@@ -28,7 +28,7 @@ export class AppController implements OnModuleInit, OnModuleDestroy {
     return `${this.appService.getHello()}`;
   }
 
-  @Get()
+  @Get('/startDate')
   async getStartDate(): Promise<string> {
     const date = await this.redisService.client.get(this.key);
     return `App started at ${date}`;
