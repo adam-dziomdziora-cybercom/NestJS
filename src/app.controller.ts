@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import * as moment from 'moment';
-import { AppService } from './app.service';
+import { AppServiceBase } from './app.service.base';
 import { IName } from './names.entity';
 import { RedisService } from './users/services/redis.service';
 
@@ -9,7 +9,7 @@ import { RedisService } from './users/services/redis.service';
 export class AppController implements OnModuleInit, OnModuleDestroy {
   readonly key = 'AppController-onModuleInit-date';
   constructor(
-    private readonly appService: AppService,
+    private readonly appService: AppServiceBase,
     private readonly redisService: RedisService,
   ) {}
 
@@ -21,6 +21,7 @@ export class AppController implements OnModuleInit, OnModuleDestroy {
 
   onModuleDestroy(): void {
     this.redisService.client.disconnect();
+    this.appService.disposeDbConnection();
   }
 
   @Get()

@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppServiceBase } from './app.service.base';
+import { AppServiceFacade } from './app.service.facade';
 import { GenericContainer, StartedTestContainer } from 'testcontainers';
 import { RedisService } from './users/services/redis.service';
 import * as moment from 'moment';
@@ -24,7 +25,7 @@ describe('AppController', () => {
     app = await Test.createTestingModule({
       controllers: [AppController],
       providers: [
-        AppService,
+        { provide: AppServiceBase, useClass: AppServiceFacade },
         {
           provide: RedisService,
           useFactory: () => redisClient,

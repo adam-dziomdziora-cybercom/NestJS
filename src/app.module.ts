@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AppServiceBase } from './app.service.base';
 import entities from './typeorm/entities';
 import { UsersModule } from './users/users.module';
 import * as env from 'env-var';
@@ -31,7 +32,7 @@ import 'dotenv/config'; // this is needed to load .env file
   ],
   controllers: [AppController],
   providers: [
-    AppService,
+    { provide: AppServiceBase, useClass: AppService },
     {
       provide: RedisService,
       useFactory: () =>

@@ -4,21 +4,54 @@ import {
   ContainerRequest,
   SqlQuerySpec,
   SqlParameter,
+  CosmosClientOptions,
 } from '@azure/cosmos';
 import { Injectable } from '@nestjs/common';
 import { myConfig } from './config';
 import { IName } from './names.entity';
+import { SecretClient } from '@azure/keyvault-secrets';
+import {
+  DefaultAzureCredential,
+  DefaultAzureCredentialClientIdOptions,
+} from '@azure/identity';
+import { AppServiceBase } from './app.service.base';
+import * as env from 'env-var';
 
 @Injectable()
-export class AppService {
-  private client: CosmosClient;
-  private options = {
-    endpoint: myConfig.endpoint,
-    key: myConfig.key,
-    userAgentSuffix: myConfig.userAgentSuffix,
-  };
-  constructor() {
-    this.client = new CosmosClient(this.options);
+export class AppService extends AppServiceBase {
+  private readonly azureCredentialOptions: DefaultAzureCredentialClientIdOptions =
+    {
+      tenantId: env.get('TENANT_ID').required().asString(),
+      managedIdentityClientId: env
+        .get('MANAGED_IDENTITY_CLIENT_ID')
+        .required()
+        .asString(),
+    };
+  private readonly azureCredential = new DefaultAzureCredential(
+    this.azureCredentialOptions,
+  );
+  private readonly keyVaultName = env
+    .get('KEY_VAULT_NAME')
+    .required()
+    .asString();
+  private readonly keyvaultUrl =
+    'https://' + this.keyVaultName + '.vault.azure.net';
+  private readonly keyVaultClient = new SecretClient(
+    this.keyvaultUrl,
+    this.azureCredential,
+  );
+  private cosmosClient: CosmosClient;
+
+  async createCosmosClient() {
+    const endpoint = await this.keyVaultClient.getSecret('cosmosdb-endpoint');
+    const key = await this.keyVaultClient.getSecret('cosmosdb-key');
+    const options: CosmosClientOptions = {
+      endpoint: endpoint.value,
+      key: key.value,
+      userAgentSuffix: myConfig.userAgentSuffix,
+    };
+    this.cosmosClient = new CosmosClient(options);
+    console.log(options);
   }
 
   getHello(): string {
@@ -26,10 +59,17 @@ export class AppService {
   }
 
   async prepareDatabase() {
+    if (!this.cosmosClient) {
+      await this.createCosmosClient();
+    }
     await this.createDatabase();
     await this.readDatabase();
     await this.createContainer();
     await this.readContainer();
+  }
+
+  disposeDbConnection() {
+    this.cosmosClient.dispose();
   }
 
   /**
@@ -37,7 +77,7 @@ export class AppService {
    */
   async queryContainer(params: IName): Promise<string[]> {
     const querySpec: SqlQuerySpec = this.getSqlQuery(params);
-    const { resources } = await this.client
+    const { resources } = await this.cosmosClient
       .database(myConfig.database.id)
       .container(myConfig.container.id)
       .items.query<IName>(querySpec)
@@ -61,7 +101,7 @@ export class AppService {
     const databaseRequest: DatabaseRequest = {
       id: myConfig.database.id,
     };
-    const { database } = await this.client.databases.createIfNotExists(
+    const { database } = await this.cosmosClient.databases.createIfNotExists(
       databaseRequest,
     );
     console.log(`Created database:\n${database.id}\n`);
@@ -71,7 +111,7 @@ export class AppService {
    * Read the database definition
    */
   private async readDatabase() {
-    const { resource: databaseDefinition } = await this.client
+    const { resource: databaseDefinition } = await this.cosmosClient
       .database(myConfig.database.id)
       .read();
     console.log(`Reading database:\n${databaseDefinition?.id}\n`);
@@ -85,7 +125,7 @@ export class AppService {
       id: myConfig.container.id,
       partitionKey: myConfig.container.partitionKey,
     };
-    const { container } = await this.client
+    const { container } = await this.cosmosClient
       .database(myConfig.database.id)
       .containers.createIfNotExists(containerRequest);
     console.log(`Created container:\n${container.id}\n`);
@@ -95,7 +135,7 @@ export class AppService {
    * Read the container definition
    */
   private async readContainer() {
-    const { resource: containerDefinition } = await this.client
+    const { resource: containerDefinition } = await this.cosmosClient
       .database(myConfig.database.id)
       .container(myConfig.container.id)
       .read();
