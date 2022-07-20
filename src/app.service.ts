@@ -10,26 +10,13 @@ import { Injectable } from '@nestjs/common';
 import { myConfig } from './config';
 import { IName } from './names.entity';
 import { SecretClient } from '@azure/keyvault-secrets';
-import {
-  DefaultAzureCredential,
-  DefaultAzureCredentialClientIdOptions,
-} from '@azure/identity';
+import { DefaultAzureCredential } from '@azure/identity';
 import { AppServiceBase } from './app.service.base';
 import * as env from 'env-var';
 
 @Injectable()
 export class AppService extends AppServiceBase {
-  private readonly azureCredentialOptions: DefaultAzureCredentialClientIdOptions =
-    {
-      tenantId: env.get('TENANT_ID').required().asString(),
-      managedIdentityClientId: env
-        .get('MANAGED_IDENTITY_CLIENT_ID')
-        .required()
-        .asString(),
-    };
-  private readonly azureCredential = new DefaultAzureCredential(
-    this.azureCredentialOptions,
-  );
+  private readonly azureCredential = new DefaultAzureCredential();
   private readonly keyVaultName = env
     .get('KEY_VAULT_NAME')
     .required()
@@ -51,7 +38,6 @@ export class AppService extends AppServiceBase {
       userAgentSuffix: myConfig.userAgentSuffix,
     };
     this.cosmosClient = new CosmosClient(options);
-    console.log(options);
   }
 
   getHello(): string {

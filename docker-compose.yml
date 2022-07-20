@@ -15,8 +15,9 @@ services:
       - REDIS_HOST=192.168.0.123
       - REDIS_SSL=false
       - KEY_VAULT_NAME=dziomtestorgkeyvault
-      - TENANT_ID=4860a3c9-8cae-47bf-8075-44fd1000d768
-      - MANAGED_IDENTITY_CLIENT_ID=19190db6-cee5-4269-b43b-7656e99333c6
+      - AZURE_TENANT_ID=4860a3c9-8cae-47bf-8075-44fd1000d768
+      - AZURE_CLIENT_ID=19190db6-cee5-4269-b43b-7656e99333c6
+      - AZURE_CLIENT_SECRET=38q8Q~o~xw.x9PsyY4lrshPGpiDBi~vStN1DtaA5
 
     build:
       context: .

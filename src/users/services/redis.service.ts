@@ -11,7 +11,6 @@ export class RedisService {
       password: ssl ? password : undefined,
       tls: ssl ? { servername: host } : undefined,
     };
-    console.log(option);
     this.client = new Redis(option);
     this.client.on('error', (err) => {
       console.error('Redis Client Error', err);
