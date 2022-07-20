@@ -3,13 +3,11 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from './../src/app.module';
 import { INestApplication } from '@nestjs/common';
 import { GenericContainer, StartedTestContainer } from 'testcontainers';
-import { RedisService } from '../src/users/services/redis.service';
 
 describe('AppController (e2e)', () => {
   jest.setTimeout(50000);
   let app: INestApplication;
   let containerRedis: StartedTestContainer;
-  let redisClient: RedisService;
 
   beforeAll(async () => {
     // "redis" is the name of the Docker imaage to download and run
@@ -18,19 +16,14 @@ describe('AppController (e2e)', () => {
       .withExposedPorts(6379)
       .start();
     const host = containerRedis.getHost();
-    process.env.REDIS_HOST = host;
     const port = containerRedis.getMappedPort(6379);
+    process.env.REDIS_HOST = host;
     process.env.REDIS_PORT = port.toString();
+    process.env.REDIS_SSL = 'false';
+    process.env.REDIS_PASSWORD = '';
     process.env.DB_PORT = '5432';
-    redisClient = new RedisService(host, port);
     const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
-      providers: [
-        {
-          provide: RedisService,
-          useFactory: () => redisClient,
-        },
-      ],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -45,7 +38,7 @@ describe('AppController (e2e)', () => {
   });
 
   afterAll(async () => {
-    redisClient.client.disconnect();
+    app.close();
     await containerRedis.stop();
   });
 });

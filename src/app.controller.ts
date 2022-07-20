@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { OnModuleInit } from '@nestjs/common';
-// import * as moment from 'moment';
+import { OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import * as moment from 'moment';
 import { AppService } from './app.service';
 import { IName } from './names.entity';
 import { RedisService } from './users/services/redis.service';
 
 @Controller()
-export class AppController implements OnModuleInit {
+export class AppController implements OnModuleInit, OnModuleDestroy {
   readonly key = 'AppController-onModuleInit-date';
   constructor(
     private readonly appService: AppService,
@@ -14,16 +14,24 @@ export class AppController implements OnModuleInit {
   ) {}
 
   async onModuleInit(): Promise<void> {
-    // const date = moment().format('llll'); // Tue, Jun 21, 2022 10:25 AM
-    // await this.redisService.client.set(this.key, date);
+    const date = moment().format('llll'); // Tue, Jun 21, 2022 10:25 AM
+    await this.redisService.client.set(this.key, date);
     await this.appService.prepareDatabase();
+  }
+
+  onModuleDestroy(): void {
+    this.redisService.client.disconnect();
   }
 
   @Get()
   async getHello(): Promise<string> {
-    // const date = await this.redisService.client.get(this.key);
-    // return `${this.appService.getHello()}, app started at: ${date}`;
-    return 'no redis cache :(';
+    return `${this.appService.getHello()}`;
+  }
+
+  @Get()
+  async getStartDate(): Promise<string> {
+    const date = await this.redisService.client.get(this.key);
+    return `App started at ${date}`;
   }
 
   @Get('/namesMale')

@@ -43,6 +43,5 @@ import 'dotenv/config'; // this is needed to load .env file
         ),
     },
   ],
-  exports: [RedisService],
 })
 export class AppModule {}
