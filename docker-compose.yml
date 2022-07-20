@@ -17,7 +17,7 @@ services:
       - KEY_VAULT_NAME=dziomtestorgkeyvault
       - AZURE_TENANT_ID=4860a3c9-8cae-47bf-8075-44fd1000d768
       - AZURE_CLIENT_ID=19190db6-cee5-4269-b43b-7656e99333c6
-      - AZURE_CLIENT_SECRET=38q8Q~o~xw.x9PsyY4lrshPGpiDBi~vStN1DtaA5
+      - AZURE_CLIENT_SECRET=<PUT_IT_HERE>
 
     build:
       context: .
