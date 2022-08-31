@@ -31,7 +31,7 @@
     "@nestjs/typeorm": "^9.0.1",
     "applicationinsights": "^2.3.4",
     "class-validator": "^0.13.2",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.2",
     "env-var": "^7.1.1",
     "ioredis": "^5.2.3",
     "moment": "^2.29.4",
