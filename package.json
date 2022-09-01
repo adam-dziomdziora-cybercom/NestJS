@@ -32,7 +32,7 @@
     "applicationinsights": "^2.3.4",
     "class-validator": "^0.13.2",
     "dotenv": "^16.0.1",
-    "env-var": "^7.1.1",
+    "env-var": "^7.2.0",
     "ioredis": "^5.2.3",
     "moment": "^2.29.4",
     "mysql2": "^2.3.3",
