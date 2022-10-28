@@ -25,6 +25,11 @@ import 'dotenv/config'; // this is needed to load .env file
         entities: entities,
         synchronize: true,
         ssl: env.get('DB_SSL').required().asBool(),
+        extra: {
+          ssl: {
+            rejectUnauthorized: false,
+          },
+        },
       }),
       inject: [ConfigService],
     }),
