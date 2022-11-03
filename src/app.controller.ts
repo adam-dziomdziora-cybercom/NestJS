@@ -15,6 +15,7 @@ export class AppController implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit(): Promise<void> {
     const date = moment().format('llll'); // Tue, Jun 21, 2022 10:25 AM
+    await this.redisService.initClient();
     console.log(
       `redis previous value: ${await this.redisService.client.get(this.key)}`,
     );
