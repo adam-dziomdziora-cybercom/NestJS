@@ -8,6 +8,7 @@ import entities from './typeorm/entities';
 import { UsersModule } from './users/users.module';
 import * as env from 'env-var';
 import { RedisService } from './users/services/redis.service';
+import { KeyVaultService } from './users/services/keyvault.service';
 import 'dotenv/config'; // this is needed to load .env file
 
 @Module({
@@ -42,6 +43,7 @@ import 'dotenv/config'; // this is needed to load .env file
       provide: RedisService,
       useFactory: () =>
         new RedisService(
+          new KeyVaultService(),
           env.get('REDIS_HOST').required().asString(),
           env.get('REDIS_PORT').required().asPortNumber(),
           env.get('REDIS_PASSWORD').asString(),
