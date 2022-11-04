@@ -5,6 +5,7 @@ import { AppServiceFacade } from './app.service.facade';
 import { GenericContainer, StartedTestContainer } from 'testcontainers';
 import { RedisService } from './users/services/redis.service';
 import * as moment from 'moment';
+import { KeyVaultServiceFacade } from './users/services/keyvault.service.facade';
 
 describe('AppController', () => {
   jest.setTimeout(50000);
@@ -20,8 +21,7 @@ describe('AppController', () => {
       .start();
     const host = container.getHost();
     const port = container.getMappedPort(6379);
-    redisClient = new RedisService(host, port);
-
+    redisClient = new RedisService(new KeyVaultServiceFacade(), host, port);
     app = await Test.createTestingModule({
       controllers: [AppController],
       providers: [
@@ -36,6 +36,7 @@ describe('AppController', () => {
 
   describe('getHello', () => {
     it('should return "Hello World!"', async () => {
+      process.env.KEY_VAULT_NAME2 = 'test';
       const appController = app.get<AppController>(AppController);
       const result = await appController.getHello();
       expect(result).toBe('Hello World!');
